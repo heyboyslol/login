@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StudentRepository extends JpaRepository<Student, String> {
 
     Optional<Student> findByEmail(String email);
+
+    Optional<Student> findByEmailAndPassword(String email, String password);
 }

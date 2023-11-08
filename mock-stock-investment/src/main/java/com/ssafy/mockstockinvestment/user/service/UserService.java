@@ -8,9 +8,11 @@ import com.ssafy.mockstockinvestment.user.domain.UserEnum;
 import com.ssafy.mockstockinvestment.user.domain.repository.ManagerRepository;
 import com.ssafy.mockstockinvestment.user.domain.repository.StudentRepository;
 import com.ssafy.mockstockinvestment.user.dto.request.CreateUserRequest;
+import com.ssafy.mockstockinvestment.user.dto.request.LoginRequest;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.InvalidIsolationLevelException;
 
 @Service
 @Transactional
@@ -43,6 +45,15 @@ public class UserService {
             Student savedStudent = studentRepository.save(student);
             return savedStudent.getUserId();
         }
+    }
+
+    public void login(LoginRequest loginRequest) {
+        Optional<Manager> managerResult = managerRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
+        Optional<Student> studentResult = studentRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
+        if (managerResult.isEmpty() && studentResult.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않습니다");
+        }
+
     }
 
 }
