@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.ssafy.mockstockinvestment.user.domain.JwtTokenProvider;
 import com.ssafy.mockstockinvestment.user.domain.Manager;
 import com.ssafy.mockstockinvestment.user.domain.Student;
-import com.ssafy.mockstockinvestment.user.domain.UserEnum;
+import com.ssafy.mockstockinvestment.user.domain.UserType;
 import com.ssafy.mockstockinvestment.user.domain.repository.ManagerRepository;
 import com.ssafy.mockstockinvestment.user.domain.repository.StudentRepository;
 import com.ssafy.mockstockinvestment.user.dto.request.CreateUserRequest;
@@ -14,7 +14,6 @@ import com.ssafy.mockstockinvestment.user.dto.response.TokenResponse;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.InvalidIsolationLevelException;
 
 @Service
 @Transactional
@@ -37,14 +36,14 @@ public class UserService {
             manager.setEmail(createUserRequest.getEmail());
             // 비밀번호 암호화 하면 좋아용 ^.^
             manager.setUserPassword(createUserRequest.getPassword());
-            manager.setUserRole(UserEnum.관리자);
+            manager.setUserRole(UserType.관리자);
             Manager savedManager = managerRepository.save(manager);
             return savedManager.getUserId();
         } else {
             Student student = new Student();
             student.setEmail(createUserRequest.getEmail());
             student.setUserPassword(createUserRequest.getPassword());
-            student.setUserRole(UserEnum.학생);
+            student.setUserRole(UserType.학생);
             Student savedStudent = studentRepository.save(student);
             return savedStudent.getUserId();
         }

@@ -23,7 +23,7 @@ public abstract class User {
 
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
-    private UserEnum userRole;
+    private UserType userRole;
 
     @Id //식별자
     @Column(name = "user_id", length = 30)
