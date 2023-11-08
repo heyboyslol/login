@@ -4,8 +4,10 @@ import java.net.URI;
 
 import com.ssafy.mockstockinvestment.user.dto.request.CreateUserRequest;
 import com.ssafy.mockstockinvestment.user.dto.request.LoginRequest;
+import com.ssafy.mockstockinvestment.user.dto.response.TokenResponse;
 import com.ssafy.mockstockinvestment.user.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,9 +29,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestParam LoginRequest loginRequest) {
-        userService.login(loginRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<TokenResponse> login(@RequestParam LoginRequest loginRequest) {
+        TokenResponse tokenResponse = userService.login(loginRequest);
+        return ResponseEntity.ok(tokenResponse);
     }
 
 }

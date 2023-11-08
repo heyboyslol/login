@@ -2,6 +2,7 @@ package com.ssafy.mockstockinvestment.user.service;
 
 import java.util.Optional;
 
+import com.ssafy.mockstockinvestment.user.domain.JwtTokenProvider;
 import com.ssafy.mockstockinvestment.user.domain.Manager;
 import com.ssafy.mockstockinvestment.user.domain.Student;
 import com.ssafy.mockstockinvestment.user.domain.UserEnum;
@@ -9,6 +10,7 @@ import com.ssafy.mockstockinvestment.user.domain.repository.ManagerRepository;
 import com.ssafy.mockstockinvestment.user.domain.repository.StudentRepository;
 import com.ssafy.mockstockinvestment.user.dto.request.CreateUserRequest;
 import com.ssafy.mockstockinvestment.user.dto.request.LoginRequest;
+import com.ssafy.mockstockinvestment.user.dto.response.TokenResponse;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.transaction.InvalidIsolationLevelException;
 @AllArgsConstructor
 public class UserService {
 
+    private final JwtTokenProvider jwtTokenProvider;
     private final ManagerRepository managerRepository;
     private final StudentRepository studentRepository;
 
@@ -47,13 +50,17 @@ public class UserService {
         }
     }
 
-    public void login(LoginRequest loginRequest) {
+    public TokenResponse login(LoginRequest loginRequest) {
         Optional<Manager> managerResult = managerRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
         Optional<Student> studentResult = studentRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
         if (managerResult.isEmpty() && studentResult.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않습니다");
         }
 
+        String accessToken = jwtTokenProvider.generateAccessToken(loginRequest.getEmail());
+        String refreshToken = jwtTokenProvider.generateRefreshToken();
+
+        return new TokenResponse(accessToken, refreshToken);
     }
 
 }
