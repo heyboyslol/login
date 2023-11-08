@@ -57,7 +57,6 @@ public class UserService {
             throw new IllegalArgumentException("존재하지 않습니다");
         }
 
-
         String accessToken = jwtTokenProvider.generateAccessToken(loginRequest.getEmail());
 //        String refreshToken = jwtTokenProvider.generateRefreshToken();
 
