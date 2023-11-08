@@ -40,4 +40,7 @@ public abstract class User {
     @Column(name = "profile_img", length = 100, nullable = false) //사용자 프로필 이미지
     @NotNull
     private String profileImg;
+
+    @Column(unique = true, nullable = false)
+    private String email;
 }
