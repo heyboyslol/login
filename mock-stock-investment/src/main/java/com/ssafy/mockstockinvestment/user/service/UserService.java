@@ -51,16 +51,22 @@ public class UserService {
     }
 
     public TokenResponse login(LoginRequest loginRequest) {
+        // 대충 일치하는지 검증하는 로직
         Optional<Manager> managerResult = managerRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
         Optional<Student> studentResult = studentRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
         if (managerResult.isEmpty() && studentResult.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않습니다");
         }
 
-        String accessToken = jwtTokenProvider.generateAccessToken(loginRequest.getEmail());
-        String refreshToken = jwtTokenProvider.generateRefreshToken();
 
-        return new TokenResponse(accessToken, refreshToken);
+        String accessToken = jwtTokenProvider.generateAccessToken(loginRequest.getEmail());
+//        String refreshToken = jwtTokenProvider.generateRefreshToken();
+
+        return new TokenResponse(accessToken);
     }
+
+
+
+
 
 }
